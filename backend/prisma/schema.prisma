@@ -18,6 +18,11 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   posts     Post[]
+  userProgress UserProgress[]
+  userBadges   UserBadge[]
+  currentStreak Int @default(0)
+  longestStreak Int @default(0)
+  lastLessonDate DateTime?
 }
 
 model Post {
@@ -29,4 +34,69 @@ model Post {
   author    User     @relation(fields: [authorId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model LessonPath {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  color       String   @default("#3B82F6")
+  icon        String   @default("BookOpen")
+  order       Int
+  lessons     Lesson[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Lesson {
+  id           Int          @id @default(autoincrement())
+  title        String
+  description  String
+  content      String       // JSON content for lesson structure
+  type         String       @default("standard") // standard, quiz, activity
+  order        Int
+  pathId       Int
+  path         LessonPath   @relation(fields: [pathId], references: [id])
+  userProgress UserProgress[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model UserProgress {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  lessonId     Int
+  user         User     @relation(fields: [userId], references: [id])
+  lesson       Lesson   @relation(fields: [lessonId], references: [id])
+  completed    Boolean  @default(false)
+  score        Int?
+  attempts     Int      @default(0)
+  completedAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([userId, lessonId])
+}
+
+model Badge {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String
+  icon        String
+  color       String      @default("#FFD700")
+  criteria    String      // JSON criteria for earning badge
+  userBadges  UserBadge[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model UserBadge {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  badgeId   Int
+  user      User     @relation(fields: [userId], references: [id])
+  badge     Badge    @relation(fields: [badgeId], references: [id])
+  earnedAt  DateTime @default(now())
+
+  @@unique([userId, badgeId])
 }

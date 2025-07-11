@@ -6,6 +6,10 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import LessonPaths from './pages/LessonPaths';
+import LessonPathDetail from './pages/LessonPathDetail';
+import LessonPlayer from './pages/LessonPlayer';
+import ProgressDashboard from './pages/ProgressDashboard';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -68,6 +72,38 @@ function App() {
             />
             <Route 
               path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <ProgressDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/lessons" 
+              element={
+                <ProtectedRoute>
+                  <LessonPaths />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/lessons/path/:pathId" 
+              element={
+                <ProtectedRoute>
+                  <LessonPathDetail />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/lessons/:lessonId" 
+              element={
+                <ProtectedRoute>
+                  <LessonPlayer />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/posts" 
               element={
                 <ProtectedRoute>
                   <Dashboard />
