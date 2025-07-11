@@ -6,7 +6,7 @@ const db = require("./db");
 // Import routes
 const authRoutes = require("./routes/auth");
 const postRoutes = require("./routes/posts");
-const lessonRoutes = require("./routes/lessons");
+const lessonRoutes = require("./routes/lessons-mock"); // Using mock version for demo
 
 const app = express();
 const PORT = process.env.PORT || 5000;
